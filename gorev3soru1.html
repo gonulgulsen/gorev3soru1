@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<body>
+    <p> 1'den 99'a kadar olan sayıları for döngüsü ile yan yana <button id="siralaButton">Sırala</button></p>
+    <button id="rastgeleButton" disabled>Rastgele Sayı Seç</button>
+    <div id="sayilar"></div>
+
+    <script>
+        const sayilarDiv = document.getElementById("sayilar");
+        const siralaButton = document.getElementById("siralaButton");
+        const rastgeleButton = document.getElementById("rastgeleButton");
+        const seciliSayilar = new Set();
+
+        // Sayıları ekrana yazdırmak için fonksiyon
+        function yazdirSayilar(sayilar) {
+            sayilarDiv.innerHTML = "";
+            for (let i = 0; i < sayilar.length; i++) {
+                const span = document.createElement("span");
+                span.textContent = sayilar[i];
+                sayilarDiv.appendChild(span);
+                if ((i + 1) % 10 === 0) {
+                    sayilarDiv.appendChild(document.createElement("br"));
+                }
+            }
+        }
+
+        // Sayıları sıralamak için fonksiyon
+        function siralaSayilar() {
+            const sayilar = [];
+            for (let i = 1; i <= 99; i++) {
+                sayilar.push(i);
+            }
+            sayilar.sort((a, b) => a - b); // Sayıları sırala
+            yazdirSayilar(sayilar);
+            seciliSayilar.clear(); // Önceki seçimleri temizle
+            siralaButton.disabled = true;
+            rastgeleButton.disabled = false;
+        }
+
+        // Rastgele sayı seçmek için fonksiyon
+        function rastgeleSayiSec() {
+            const rastgeleSayi = Math.floor(Math.random() * 101) - 1;
+            seciliSayilar.add(rastgeleSayi); // Seçilen sayıyı ekle
+            const spanler = sayilarDiv.getElementsByTagName("span");
+            for (let i = 0; i < spanler.length; i++) {
+                spanler[i].style.fontWeight = seciliSayilar.has(parseInt(spanler[i].textContent)) ? "bold" : "normal";
+                spanler[i].style.color = seciliSayilar.has(parseInt(spanler[i].textContent)) ? "red" : "black";
+            }
+        }
+
+        siralaButton.addEventListener("click", function () {
+            siralaSayilar();
+            rastgeleButton.addEventListener("click", rastgeleSayiSec);
+        });
+
+    </script>
+</body>
+</html>
